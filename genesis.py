@@ -180,7 +180,8 @@ def calculate_hashrate(nonce, last_updated):
     now             = time.time()
     hashrate        = round(1000000/(now - last_updated))
     generation_time = round(pow(2, 32) / hashrate / 3600, 1)
-    sys.stdout.write("\r%s hash/s, estimate: %s h"%(str(hashrate), str(generation_time)))
+    progress        = round((100. * nonce)/pow(2, 32), 1)
+    sys.stdout.write("\r\033[K%s hash/s, nonce: %s, estimate: %sh (%s%% scanned)"%(str(hashrate), str(nonce), str(generation_time), str(progress)))
     sys.stdout.flush()
     return now
   else:
