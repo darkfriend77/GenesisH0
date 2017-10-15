@@ -1,5 +1,6 @@
 import hashlib, binascii, struct, array, os, time, sys, optparse
 import scrypt
+import neoscrypt
 
 from construct import *
 
@@ -30,7 +31,7 @@ def get_args():
   parser.add_option("-n", "--nonce", dest="nonce", default=0,
                    type="int", help="the first value of the nonce that will be incremented when searching the genesis hash")
   parser.add_option("-a", "--algorithm", dest="algorithm", default="SHA256",
-                    help="the PoW algorithm: [SHA256|scrypt|X11|X13|X15]")
+                    help="the PoW algorithm: [SHA256|scrypt|X11|X13|X15|neoscrypt]")
   parser.add_option("-p", "--pubkey", dest="pubkey", default="04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f",
                    type="string", help="the pubkey found in the output script")
   parser.add_option("-v", "--value", dest="value", default=5000000000,
@@ -47,7 +48,7 @@ def get_args():
   return options
 
 def get_algorithm(options):
-  supported_algorithms = ["SHA256", "scrypt", "X11", "X13", "X15"]
+  supported_algorithms = ["SHA256", "scrypt", "X11", "X13", "X15", "neoscrypt"]
   if options.algorithm in supported_algorithms:
     return options.algorithm
   else:
@@ -143,6 +144,8 @@ def generate_hash(data_block, algorithm, start_nonce, bits):
 def generate_hashes_from_block(data_block, algorithm):
   sha256_hash = hashlib.sha256(hashlib.sha256(data_block).digest()).digest()[::-1]
   header_hash = ""
+  if algorithm == 'neoscrypt':
+    header_hash = neoscrypt.getPoWHash(data_block)[::-1] 
   if algorithm == 'scrypt':
     header_hash = scrypt.hash(data_block,data_block,1024,1,1,32)[::-1] 
   elif algorithm == 'SHA256':
@@ -173,7 +176,7 @@ def is_genesis_hash(header_hash, target):
 
 
 def calculate_hashrate(nonce, last_updated):
-  if nonce % 1000000 == 999999:
+  if nonce % 100000 == 99999:
     now             = time.time()
     hashrate        = round(1000000/(now - last_updated))
     generation_time = round(pow(2, 32) / hashrate / 3600, 1)
