@@ -1,6 +1,6 @@
 import hashlib, binascii, struct, array, os, time, sys, optparse
 import scrypt
-import neoscrypt
+import coinhash
 
 from construct import *
 
@@ -145,7 +145,7 @@ def generate_hashes_from_block(data_block, algorithm):
   sha256_hash = hashlib.sha256(hashlib.sha256(data_block).digest()).digest()[::-1]
   header_hash = ""
   if algorithm == 'neoscrypt':
-    header_hash = neoscrypt.getPoWHash(data_block)[::-1] 
+    header_hash = coinhash.NeoscryptHash(data_block)[::-1] 
   if algorithm == 'scrypt':
     header_hash = scrypt.hash(data_block,data_block,1024,1,1,32)[::-1] 
   elif algorithm == 'SHA256':
