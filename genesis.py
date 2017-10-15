@@ -41,14 +41,14 @@ def get_args():
 
   (options, args) = parser.parse_args()
   if not options.bits:
-    if options.algorithm == "scrypt" or options.algorithm == "X11" or options.algorithm == "X13" or options.algorithm == "X15":
+    if options.algorithm == "scrypt" or options.algorithm == "X11" or options.algorithm == "X13" or options.algorithm == "X15" or options.algorithm == "neoscrypt":
       options.bits = 0x1e0ffff0
     else:
       options.bits = 0x1d00ffff
   return options
 
 def get_algorithm(options):
-  supported_algorithms = ["SHA256", "scrypt", "X11", "X13", "X15", "neoscrypt"]
+  supported_algorithms = ["SHA256", "scrypt", "X11", "X13", "X15", "neoscrypt", "skein", "qubit", "groestl"]
   if options.algorithm in supported_algorithms:
     return options.algorithm
   else:
@@ -95,7 +95,6 @@ def create_transaction(input_script, output_script,options):
   tx.sequence          = 0xFFFFFFFF
   tx.num_outputs       = 1
   tx.out_value         = struct.pack('<q' ,options.value)#0x000005f5e100)#012a05f200) #50 coins
-  #tx.out_value         = struct.pack('<q' ,0x000000012a05f200) #50 coins
   tx.output_script_len = 0x43
   tx.output_script     = output_script
   tx.locktime          = 0 
@@ -133,7 +132,7 @@ def generate_hash(data_block, algorithm, start_nonce, bits):
     sha256_hash, header_hash = generate_hashes_from_block(data_block, algorithm)
     last_updated             = calculate_hashrate(nonce, last_updated)
     if is_genesis_hash(header_hash, target):
-      if algorithm == "X11" or algorithm == "X13" or algorithm == "X15":
+      if algorithm == "X11" or algorithm == "X13" or algorithm == "X15" or algorithm == "neoscrypt" or algorithm == "script":
         return (header_hash, nonce)
       return (sha256_hash, nonce)
     else:
