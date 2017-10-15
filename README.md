@@ -1,12 +1,12 @@
 # GenesisH0
-A python script for creating the parameters required for a unique genesis block. SHA256/scrypt/X11/X13/X15.
+A python script for creating the parameters required for a unique genesis block. SHA256/scrypt/X11/X13/X15/neoscrypt/Skein/Qubit/groestl.
 
 ### Dependencies
     sudo pip install scrypt construct==2.5.2
 
 To create geneses based on X11 algorithm you will also need to install the [xcoin-hash](https://github.com/lhartikk/xcoin-hash) module. 
 For X13 you will need the [x13_hash](https://github.com/sherlockcoin/X13-PythonHash) module and for X15 the [x15_hash](https://github.com/minings/x15_hash) module.
-To use neoscrypt, you will need to install [coinhash](https://github.com/Groestlcoin/coinhash).
+To use neoscrypt/skein/qubit or groestl, you will need to install [coinhash](https://github.com/Groestlcoin/coinhash).
     
 ### Examples
 Create the original genesis hash found in Bitcoin
@@ -58,7 +58,7 @@ Create the original genesis hash found in HiroCoin (requires [xcoin-hash](https:
          the first value of the nonce that will be incremented
          when searching the genesis hash
       -a ALGORITHM, --algorithm=ALGORITHM
-         the PoW algorithm: [SHA256|scrypt|X11|X13|X15|neoscrypt]
+         the PoW algorithm: [SHA256|scrypt|X11|X13|X15|neoscrypt|skein|qubit|groestl]
       -p PUBKEY, --pubkey=PUBKEY
          the pubkey found in the output script
       -v VALUE, --value=VALUE
