@@ -2,6 +2,7 @@
 A python script for creating the parameters required for a unique genesis block. SHA256/scrypt/X11/X13/X15/neoscrypt/Skein/Qubit/groestl.
 
 ### Dependencies
+    sudo apt-get install libssl-dev 
     sudo pip install scrypt construct==2.5.2
 
 To create geneses based on X11 algorithm you will also need to install the [xcoin-hash](https://github.com/lhartikk/xcoin-hash) module. 
